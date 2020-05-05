@@ -14,7 +14,7 @@
     {%for t in all_todos%}
     <ul>
         <li {%if t.done%} style="text-decoration:line-through" {%endif%}>
-            {{t.name}}
+            {{t.name}} | <a href="{% url 'update_todo_route' todo_id=t.id %}">Edit</a>
         </li>
     </ul>
     {%endfor%}

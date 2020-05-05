@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404, reverse
 from .models import Todo
 from .forms import TodoForm
 
@@ -24,11 +24,31 @@ def create(request):
         else:
             # if there are errors, render again with the form
             # Django will automatically show the errors
-            return render(request, 'todo/create.template.html',{
-                'form': todo_form
+            return render(request, 'todo/create.template.html', {
+                'form': create_form
             })
     else:
         todo_form = TodoForm()
         return render(request, 'todo/create.template.html', {
             'form': todo_form
         })
+
+
+def update_todo(request, todo_id):
+    # means: get a Todo which primary key matches todo_id
+    todo = get_object_or_404(Todo, pk=todo_id)
+
+    if request.method == 'POST':
+        todo_form = TodoForm(request.POST, instance=todo)
+        if todo_form.is_valid():
+            todo_form.save()
+            return redirect(reverse(index))
+        else:
+            return render(request, 'todo/update.template.html', {
+                'form': todo_form
+            })
+
+    todo_form = TodoForm(instance=todo)
+    return render(request, 'todo/update.template.html', {
+        'form': todo_form
+    })
