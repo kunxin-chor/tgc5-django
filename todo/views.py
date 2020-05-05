@@ -52,3 +52,15 @@ def update_todo(request, todo_id):
     return render(request, 'todo/update.template.html', {
         'form': todo_form
     })
+
+
+def delete_todo(request, todo_id):
+    todo = get_object_or_404(Todo, pk=todo_id)
+
+    if request.method == "POST":
+        todo.delete()
+        return redirect(reverse(index))
+    else:
+        return render(request, 'todo/delete.template.html', {
+            'todo': todo
+        })
