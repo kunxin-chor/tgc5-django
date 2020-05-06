@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'todo'
 ]
 
@@ -55,7 +59,8 @@ ROOT_URLCONF = 'TodoListProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'templates', 'allauth')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,6 +72,37 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+SITE_ID = 1
+
+# log in via username or email
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+# whether the user must provide an email
+ACCOUNT_EMAIL_REQUIRED = True
+
+# must the user click on a link to verify his email before he can log in
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+# does the user need enter his email twice when signing up
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+
+# min length of user name
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+
+# url to login
+LOGIN_URL = '/accounts/login/'
+
+# url to go to after a successful login
+LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'TodoListProject.wsgi.application'
 
@@ -123,3 +159,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

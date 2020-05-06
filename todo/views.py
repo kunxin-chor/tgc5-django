@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404, reverse
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import Todo
 from .forms import TodoForm
 
@@ -11,6 +12,7 @@ def index(request):
     })
 
 
+@login_required
 def create(request):
     # if the method is POST, it means that the form is submitted
     if request.method == 'POST':
