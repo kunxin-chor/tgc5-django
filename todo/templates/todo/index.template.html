@@ -14,6 +14,13 @@
     {%for t in all_todos%}
     <ul>
         <li {%if t.done%} style="text-decoration:line-through" {%endif%}>
+
+            [ {{t.priority.name}} ] 
+
+            {%for tag in t.tags.all %}
+                ({{tag.name}})
+            {%endfor%}
+
             {{t.name}} | <a href="{% url 'update_todo_route' todo_id=t.id %}">Edit</a> |
                         <a href="{% url 'delete_todo_route' todo_id=t.id %}">Delete</a>
         </li>
