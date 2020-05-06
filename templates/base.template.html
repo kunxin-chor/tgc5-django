@@ -12,6 +12,15 @@
   </head>
   <body>
     <div class="container">
+        {%if messages %}
+        <div class="alert alert-success">
+            <div>
+                {%for m in messages%}
+                    {{m}}
+                {%endfor%}
+            </div>
+        </div>
+        {%endif%}
 
         {% if request.user.is_authenticated  %}
         <p>Welcome {{request.user}} | <a href="{%url 'account_logout'%}">Logout</a></p>

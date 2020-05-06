@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib import messages
 from .models import Todo
 from .forms import TodoForm
 
@@ -21,7 +22,8 @@ def create(request):
         # check if all fields are valid
         if create_form.is_valid():
             # if all fields valid, save
-            create_form.save()
+            saved_todo = create_form.save()
+            messages.success(request, f"Todo '{saved_todo.name}' has been added successfully!")
             return redirect(index)
         else:
             # if there are errors, render again with the form
@@ -60,6 +62,7 @@ def delete_todo(request, todo_id):
     todo = get_object_or_404(Todo, pk=todo_id)
 
     if request.method == "POST":
+        messages.success(request, f"Todo '{todo.name}' has been deleted")   
         todo.delete()
         return redirect(reverse(index))
     else:
