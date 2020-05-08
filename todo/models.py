@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -12,6 +14,7 @@ class Todo(models.Model):
     done = models.BooleanField(blank=False, default=False)
     priority = models.ForeignKey('Priority', on_delete=models.PROTECT)
     tags = models.ManyToManyField('Tag', blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

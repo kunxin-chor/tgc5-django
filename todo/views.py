@@ -7,7 +7,7 @@ from .forms import TodoForm
 
 # Create your views here.
 def index(request):
-    all_todos = Todo.objects.all()
+    all_todos = Todo.objects.filter(user=request.user)
     return render(request, 'todo/index.template.html', {
         'all_todos': all_todos
     })
@@ -22,7 +22,14 @@ def create(request):
         # check if all fields are valid
         if create_form.is_valid():
             # if all fields valid, save
-            saved_todo = create_form.save()
+
+            # create the instance BUT don't save to database yet
+            saved_todo = create_form.save(commit=False)
+      
+            # assign the current logged in user to the todo that we just created
+            saved_todo.user = request.user
+            saved_todo.save()
+
             messages.success(request, f"Todo '{saved_todo.name}' has been added successfully!")
             return redirect(index)
         else:
