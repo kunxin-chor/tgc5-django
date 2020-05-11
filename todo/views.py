@@ -2,14 +2,37 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404, 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from .models import Todo
-from .forms import TodoForm
+from .forms import TodoForm, SearchForm
+from django.db.models import Q
 
 
 # Create your views here.
 def index(request):
+    # all_todos = Todo.objects.all()
+    # all_todos = all_todos.filter(user=request.user)
+    # all_todos = all_todos.filter(done=True)
+    # all_todos = all_todos.filter(priority__name__in=['High','Low'])
+    # all_todos = all_todos.filter(name__icontains="letters")
+
     all_todos = Todo.objects.filter(user=request.user)
+    search_form = SearchForm(request.GET)
+
+    # create a query that is always true
+    queries = ~Q(pk__in=[])
+
+    if request.GET:
+        if 'todo_name' in request.GET and request.GET['todo_name']:
+            queries = queries & Q(name__icontains=request.GET['todo_name'])
+
+        if 'priority' in request.GET and request.GET['priority']:
+            queries = queries & Q(priority__in=request.GET['priority'])
+
+    all_todos = all_todos.filter(queries)
+
+    print(all_todos.query)
     return render(request, 'todo/index.template.html', {
-        'all_todos': all_todos
+        'all_todos': all_todos,
+        'search_form': search_form
     })
 
 
