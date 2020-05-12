@@ -1,6 +1,10 @@
 {% extends 'base.template.html' %}
 {% load crispy_forms_tags %}
 
+{%block head%}
+{{ form.media}}
+{%endblock%}
+
 {% block content %}
     <form method="POST">
         {% csrf_token %}

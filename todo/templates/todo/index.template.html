@@ -9,10 +9,11 @@
         {{search_form|crispy}}
         <input type="submit"/>
     </form>
-    {%for t in all_todos%}
     <ul>
-        <li {%if t.done%} style="text-decoration:line-through" {%endif%}>
+    {%for t in all_todos%}
 
+        <li {%if t.done%} style="text-decoration:line-through" {%endif%}>
+         
             [ {{t.priority.name}} ] 
 
             {%for tag in t.tags.all %}
@@ -21,7 +22,12 @@
 
             {{t.name}} | <a href="{% url 'update_todo_route' todo_id=t.id %}">Edit</a> |
                         <a href="{% url 'delete_todo_route' todo_id=t.id %}">Delete</a>
+
+            {%if t.image %}
+            <img src="{{ t.image.cdn_url}}"/>
+            {%endif%}
         </li>
-    </ul>
+
     {%endfor%}
+    </ul>
 {%endblock%}

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from pyuploadcare.dj.models import ImageField
 
 # Create your models here.
 
@@ -15,6 +15,7 @@ class Todo(models.Model):
     priority = models.ForeignKey('Priority', on_delete=models.PROTECT)
     tags = models.ManyToManyField('Tag', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    image = ImageField(blank=True, manual_crop="")
 
     def __str__(self):
         return self.name
